@@ -66,3 +66,15 @@ cd project-template/
 bash build-skeleton-project.sh
 ```
 
+## Run by Environment 
+In the infra folder there are three definitions, `non-prod/dev`. `non-prod/uat`, and `prod`. 
+For each of these environments there is a provision block assigning the account to run form, and a call to the terraform module in the terraform folder of the project.  
+From each of the folders the terraform provision will work by: 
+
+Needs: Terraform
+
+```bash
+terraform init
+terrafrorm plan -out env.plan
+terraform apply env.plan
+``` 
