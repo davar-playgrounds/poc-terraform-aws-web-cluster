@@ -6,7 +6,7 @@ provider "aws" {
 }
 
 variable "aws_region" {
-  default = "us-west-1"
+  default = "ap-southeast-2"
 }
 
 variable "cred_path" {
@@ -21,11 +21,12 @@ module "website" {
   source = "../../../terraform/"
 
   vpc_name = "PoS UAT VPC"
-  vpc_cidr = "10.2.0.0/22"
+  vpc_cidr = "10.2.0.0/21"
   private_subnets = ["10.2.0.0/24","10.2.1.0/24","10.2.2.0/24"]
   public_subnets = ["10.2.3.0/24","10.2.4.0/24","10.2.5.0/24"]
   enable_nat_gw = true
   environment = "uat"
   region = var.aws_region
-
+  loadbalancer_name_prefix = "website-lb-uat"
+  bucket_logging_name = "loadbalance-access-logging-uat"
 }

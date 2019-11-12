@@ -6,7 +6,7 @@ provider "aws" {
 }
 
 variable "aws_region" {
-  default = "us-west-1"
+  default = "us-east-1"
 }
 
 variable "cred_path" {
@@ -17,13 +17,15 @@ variable "cred_profile" {
   default = "sandpit"
 }
 module "website" {
-  source = "../../../terraform/"
+  source = "../../terraform/"
 
   vpc_name = "PoS PROD VPC"
-  vpc_cidr = "10.3.0.0/22"
+  vpc_cidr = "10.3.0.0/21"
   private_subnets = ["10.3.0.0/24","10.3.1.0/24","10.3.2.0/24"]
   public_subnets = ["10.3.3.0/24","10.3.4.0/24","10.3.5.0/24"]
   enable_nat_gw = true
   environment = "dev"
   region = var.aws_region
+  loadbalancer_name_prefix = "website-lb-prod"
+  bucket_logging_name = "loadbalance-access-logging-prod"
 }

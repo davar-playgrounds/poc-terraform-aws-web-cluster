@@ -9,3 +9,5 @@ variable "public_subnets" {
 variable "enable_nat_gw" {}
 variable "environment" {}
 variable "region" {}
+variable "loadbalancer_name_prefix" {}
+variable "bucket_logging_name" {}
