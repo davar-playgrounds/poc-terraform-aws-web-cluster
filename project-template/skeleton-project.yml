@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: no
+  tasks:
+    - name: Create the host directories
+      file:
+        state: directory
+        path: "{{ item }}"
+      with_items:
+        - "../src"
+        - "../infra"
+        - "../infra/non-prod"
+        - "../infra/prod"
+        - "../infra/non-prod/dev"
+        - "../infra/non-prod/uat"
+        - "../infra/prod"
+        - "../terraform"
+        - "../docs"
+        - "../ci"
+
+    - name: Create skeleton files
+      file:
+        state: touch
+        path: "{{ item }}"
+      with_items:
+        - "../infra/non-prod/dev/main.tf"
+        - "../infra/non-prod/uat/main.tf"
+        - "../infra/prod/main.tf"
+        - "../terraform/main.tf"
+        - "../ci/pipeline.yml"
