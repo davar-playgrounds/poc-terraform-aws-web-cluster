@@ -27,4 +27,7 @@
         - "../infra/non-prod/uat/main.tf"
         - "../infra/prod/main.tf"
         - "../terraform/main.tf"
+        - "../terraform/variables.tf"
+        - "../terraform/outputs.tf"
         - "../ci/pipeline.yml"
+        - "../src/index.php"
