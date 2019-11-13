@@ -195,8 +195,8 @@ Parameters:
 |  bucket_logging_name | "loadbalance-access-logging-uat" | no | Name of the logging bucket
 |  deploy_image_website_instance_type | "t2.small" | no | AWS instance type
 |  number_of_instances | var.number_of_instances| | yes | Number of instances that should run. (preferred number)
-|  maximum_number_of_instances | 6 | no | Max if number of instances, needs to be greater or equal to the number of instances
-|  minumum_number_of_instances | 3 | no | Min if number of instances, needs to be smaller or equal to the number of instances
+|  maximum_number_of_instances | 6 | no | Max of number of instances, needs to be greater or equal to the number of instances
+|  minumum_number_of_instances | 3 | no | Min of number of instances, needs to be smaller or equal to the number of instances
 |  deploy_image_website | var.deploy_image_website | yes  | AIM Image to deploy, needs to exist and permitted to be used
 |  release_version| var.release_version | yes | Version of the release that is passed to the AIM
 
