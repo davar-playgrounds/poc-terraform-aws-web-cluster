@@ -17,7 +17,8 @@ Out of scope are:
 - Limited use of SCM backed terraform modules to keep all code together. 
 - Security in IAM , restrictions only as stipulated in the assignment. 
 - CI other than an bash pipeline.
-- SSL certification and HTTPS 
+- SSL certificates and HTTPS
+- Git signing of commits 
 
 Licence:  
 This software is licensed, before use please assess this fits your business-case. 
@@ -100,9 +101,9 @@ Go to the ci folder and run
 ```bash 
 bash pipeline.sh 0.1.0 DEV true
 ```
-Param 1 : Version to deploy, defaults to 0.0.0
-Param 2 : Environment to deploy to, one of 'DEV','UAT','PROD' defaults to 'DEV' 
-Param 3 : Build AIM iso before deploying, needs to have a pipeline.sh with true run first. One of 'true', 'false', defaults to 'true' 
+Param 1 : Version to deploy, defaults to 0.0.0  
+Param 2 : Environment to deploy to, one of 'DEV','UAT','PROD' defaults to 'DEV'   
+Param 3 : Build AIM iso before deploying, needs to have a pipeline.sh with true run first. One of 'true', 'false', defaults to 'true'   
 
 You can test build an AIM image and then deploy it to all environments by:
 ```bash
