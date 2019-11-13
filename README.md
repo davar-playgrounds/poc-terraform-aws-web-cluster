@@ -1,23 +1,35 @@
 # Proof of Skill (PoS) Terraform aws web cluster
 
 
-This is on request from Ask Nicely as a skills test. 
+This is on request from Ask Nicely as a skills test.  
 Though the assignment is simple terraform script, this script is not really of value without being part of a deployment pipeline. On a senior level this pipeline needs to be placed in context to show the value of the script. 
 So it has been decided to place the terraform script in a pipeline.  
-Goals are:
+Goals are:  
 - Show the added value of a pipeline. 
 - Create a PoC that can be used outside training exercises. 
 - Trigger a discussion of value and business processes as a result of this PoS 
 - Showcase ask nicely what modern technologies can deliver in a short time. 
 
-The requested project, (original); 
+Out of scope are:  
+- Any type of normal corroboration with the team or customer to establish this adds value to them and / or the team. 
+- Code reviews and pull requests as normal within a software development team.  
+- Any type of terraform state persistence. All is local state. 
+- Limited use of SCM backed terraform modules to keep all code together. 
+- Security in IAM , restrictions only as stipulated in the assignment. 
+- CI other than an bash pipeline.
+
+Licence:  
+This software is licensed, before use please assess this fits your business-case. 
+
+
+The requested assignment, (original); 
 
 ```
 Write a Terraform resource that launches:
 
-- A VPC. This should include a subnet, route table, and internet gateway.
-- An EC2 instance, running a web server that serves a page with the content of your choice. This can be an AWS Free Tier instance, and based off a free tier image.
-- An Application Load Balancer targeting the EC2 instance.
+- [check] A VPC. This should include a subnet, route table, and internet gateway.
+- [check] An EC2 instance, running a web server that serves a page with the content of your choice. This can be an AWS Free Tier instance, and based off a free tier image.
+- [check] An Application Load Balancer targeting the EC2 instance.
 
 This task will require the use of Terraform and the AWS provider. Feel free to use other providers as you see fit.
 
@@ -27,15 +39,15 @@ Make sure that you are running an appropriate `.gitignore` file that excludes yo
 
 What are we looking for?
 
-- Resources should be contained within the VPC
-- EC2 instances should not be directly publicly accessible by HTTP/HTTPS (You should be able to access web server content via the Load Balancer.)
-- Resources should be well named, well structured and logically separated. It's good to have use of modules and input/output variables when appropriate.
+- [check] Resources should be contained within the VPC
+- [check] EC2 instances should not be directly publicly accessible by HTTP/HTTPS (You should be able to access web server content via the Load Balancer.)
+- [check] Resources should be well named, well structured and logically separated. It's good to have use of modules and input/output variables when appropriate.
 
 Extra Tasks:
 
-- Ports available on Load Balancers and EC2 instances should be limited to only the necessary ports
-- It should be possible to adjust the number of EC2 instances by only changing a variable
-
+- [check] Ports available on Load Balancers and EC2 instances should be limited to only the necessary ports
+- [check] It should be possible to adjust the number of EC2 instances by only changing a variable
+ 
 How to submit your work?
 
 - Commit your Terraform project as a Github repo.
@@ -87,7 +99,7 @@ Go to the ci folder and run
 ```bash 
 bash pipeline.sh 0.1.0 DEV
 ```
-And follow the deployment, note that you can follow the commands to see how the process is working. This pipeline can easily run from Jenkins, Concourse, Circle CI or other CD/CI environment. 
+And follow the deployment, note that you can follow the commands in the pipeline file to see how the process is working. This pipeline can easily run from Jenkins, Concourse, Circle CI or other CD/CI environment. 
 
 
 

@@ -10,16 +10,19 @@ cd -
 if [[ "DEV" == "${ENV_TARGET}" ]]; then
   echo "DEV AMI is $AMI"
   cd ../infra/non-prod/dev
+  terraform init
   terraform plan -var deploy_image_website=${AMI} -var release_version=${VERSION} -out env.plan
   terraform apply env.plan
 elif [[ "UAT" == "${ENV_TARGET}" ]]; then
   echo "UAT AMI is $AMI"
   cd ../infra/non-prod/uat
+  terraform init
   terraform plan -var deploy_image_website=${AMI} -var release_version=${VERSION} -out env.plan
   terraform apply env.plan
 elif [[ "PROD" == "${ENV_TARGET}" ]]; then
   echo "PROD AMI is $AMI"
   cd ../infra/prod
+  terraform init
   terraform plan -var deploy_image_website=${AMI} -var release_version=${VERSION} -out env.plan
   terraform apply env.plan
 else

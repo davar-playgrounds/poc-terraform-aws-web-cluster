@@ -30,7 +30,7 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "baseInit.sh"
+      "script": "image-initialize.sh"
     },
     {
       "type": "file",
