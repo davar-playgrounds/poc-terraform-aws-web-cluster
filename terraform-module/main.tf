@@ -20,6 +20,7 @@ module "vpc" {
     Owner_team = "CloudOps"
     Expire_by = "20191231"
     Environment = var.environment
+    Version = var.release_version
   }
 }
 

@@ -16,8 +16,15 @@ variable "cred_path" {
 variable "cred_profile" {
   default = "private"
 }
+
+variable "deploy_image_website" {}
+variable "release_version" {
+  default = "0.0.3"
+}
+
+
 module "core_infrastructure" {
-  source = "../../terraform/"
+  source = "../../terraform-module/"
 
   vpc_name = "PoS PROD VPC"
   vpc_cidr = "10.3.0.0/21"
@@ -28,4 +35,15 @@ module "core_infrastructure" {
   region = var.aws_region
   loadbalancer_name_prefix = "website-lb-prod"
   bucket_logging_name = "loadbalance-access-logging-prod"
+  deploy_image_website_instance_type = "t2.small"
+  number_of_instances = 9
+  maximum_number_of_instances = 9
+  minumum_number_of_instances = 3
+  deploy_image_website = var.deploy_image_website
+  release_version= var.release_version
+
+}
+
+output "loadbalancer_dns" {
+  value = module.core_infrastructure.loadbalancer_entry_point
 }

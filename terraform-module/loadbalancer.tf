@@ -18,7 +18,8 @@ resource "aws_lb" "website_loadbalancer" {
   name               = "lb-website-${var.environment}"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.website_fw_lb.id]
+  security_groups    = [
+    aws_security_group.website_fw_lb.id]
   subnets            = module.vpc.public_subnets
 
   enable_deletion_protection = false
@@ -31,6 +32,7 @@ resource "aws_lb" "website_loadbalancer" {
     Owner_team = "CloudOps"
     Expire_by = "20191231"
     Environment = var.environment
+    Version = var.release_version
   }
 }
 

@@ -10,6 +10,11 @@ variable "cred_profile" {
   default = "private"
 }
 
+variable "release_version" {
+  default = "0.0.3"
+}
+
+variable "deploy_image_website" {}
 
 provider "aws" {
   version = "~> 2.0"
@@ -19,8 +24,10 @@ provider "aws" {
 }
 
 
+
+
 module "core_infrastructure" {
-  source = "../../../terraform/"
+  source = "../../../terraform-module/"
 
   vpc_name = "PoS DEV VPC"
   vpc_cidr = "10.1.0.0/21"
@@ -35,5 +42,10 @@ module "core_infrastructure" {
   number_of_instances = 3
   maximum_number_of_instances = 6
   minumum_number_of_instances = 3
-  deploy_image_website = "ami-0f42adcde7bd302ce"
+  deploy_image_website = var.deploy_image_website
+  release_version= var.release_version
+}
+
+output "loadbalancer_dns" {
+  value = module.core_infrastructure.loadbalancer_entry_point
 }

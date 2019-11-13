@@ -1,9 +1,16 @@
-# Proof of Skill  Terraform aws web cluster
+# Proof of Skill (PoS) Terraform aws web cluster
 
 
 This is on request from Ask Nicely as a skills test. 
+Though the assignment is simple terraform script, this script is not really of value without being part of a deployment pipeline. On a senior level this pipeline needs to be placed in context to show the value of the script. 
+So it has been decided to place the terraform script in a pipeline.  
+Goals are:
+- Show the added value of a pipeline. 
+- Create a PoC that can be used outside training exercises. 
+- Trigger a discussion of value and business processes as a result of this PoS 
+- Showcase ask nicely what modern technologies can deliver in a short time. 
 
-The requested project; 
+The requested project, (original); 
 
 ```
 Write a Terraform resource that launches:
@@ -46,12 +53,44 @@ Architecural decisions are placed in the docs/doc/adr folder in the form of [Arc
 # Implementation 
 
 ## Technology stack
-- Terraform 0.12.13
+**Primary technology**
+- Terraform 0.12.13  
+
+**Ancillary technology**
+- Linux Gnome 3.34
 - Bash 5.0 
-- Linux Gnome 3.34 
-- IDE: IntelliJ 2019.2.4  
+- IntelliJ 2019.2.4  
 - Ansible 2.9.0 
 - [ADR-tools](https://github.com/npryce/adr-tools/releases/tag/3.0.0)  
+- Packer 1.4.1
+- [AWS-Vault](https://github.com/99designs/aws-vault)
+
+## Prerequisites
+- AWS account with admin rights 
+- AWS key and secret to the admin account
+- Configure the .aws/credentials file as we use this in the terraform script, create the `private` profile 
+- Linux machine or VM 
+- Installed the technology stack. 
+- Internet connection (no proxy)
+- Register yourself for use of the `ami-0f42adcde7bd302ce`AMI [here](aws-marketplace/CentOS 8 LEMP Stack - Linux Nginx MySQL/MariaDB PHP 7.2-4c9ced57-677c-4dff-b708-e91c27f3fd7b-ami-042144ca63e136136.4) 
+
+## Flow 
+The readme will continue with the flow as follows:
+- Pre: Setup and project generation 
+- CI : Source image creation 
+- Provision : Infrastructure and deployment
+- The pipeline, go with the flow
+
+## TL;DR 
+After installing and assuring the prerequisites. 
+Go to the ci folder and run
+```bash 
+bash pipeline.sh 0.1.0 DEV
+```
+And follow the deployment, note that you can follow the commands to see how the process is working. This pipeline can easily run from Jenkins, Concourse, Circle CI or other CD/CI environment. 
+
+
+
 
 ## Skeleton project generation. 
 The start phase is the generation of the directory structure of the site. Projects should follow a standard pattern that makes automation over several projects easier.
@@ -64,22 +103,53 @@ run as
 ```bash 
 cd project-template/
 bash build-skeleton-project.sh
+
 ```
+
+Produces : Standarized project to work from.   
+Values: Reproducible, Standarized, Documented as code. 
+
+
+## Build image with application 
+This will create an AIM image that we use for the deployment of the app. 
+Needs: Packer, bash 
+In the CI folder it will build from the build-release.sh script as 
+```bash
+bash build-release.sh <version> 
+# for instance
+bash build-release.sh 0.1.0
+```
+
+Produces: An AIM image with the software backed in from a trusted template  
+Values: Developers can work of a trusted image and deploy the same image to several environments. 
+
+Note: The base image defined in the packer json script at `ci/website-builder.json` is : `ami-0f42adcde7bd302ce`. 
+
+This is a image with php and fastcgi installed. Get a subscription at `aws-marketplace/CentOS 8 LEMP Stack - Linux Nginx MySQL/MariaDB PHP 7.2-4c9ced57-677c-4dff-b708-e91c27f3fd7b-ami-042144ca63e136136.4` (no costs except usage) 
 
 ## Run by Environment 
 In the infra folder there are three definitions, `non-prod/dev`. `non-prod/uat`, and `prod`. 
 For each of these environments there is a provision block assigning the account to run form, and a call to the terraform module in the terraform folder of the project.  
 From each of the folders the terraform provision will work by: 
 
+The `ami-0afc3beaf12bfacc6` is the value the build-release will have returned as the AMI. This will be different from here. 
+
 Needs: Terraform
 
 ```bash
 terraform init
-terrafrorm plan -out env.plan
+terrafrorm plan -var "deploy_image_website=ami-0afc3beaf12bfacc6" -out env.plan
 terraform apply env.plan
 ``` 
 
-## Deployment 
+Produces: Infrastructure and the website running.  
+Values: Guarantee of status of the platform. Platform as a service, Infrastructure as code
 
+Deployment and infrastructure maintenance in one provision phase. Expandable over many environments.
+On completion the terraform apply script returns the endpoint of the loadbalancer to see the application on. 
 
  
+
+Note: This system tears down the autoscaler on a new deploy and creates a new one, causing a few minutes outage, there is way to have no outage by doing the instance replacement by hand in the autoscaler console on AWS or use AWS commandline. 
+
+
