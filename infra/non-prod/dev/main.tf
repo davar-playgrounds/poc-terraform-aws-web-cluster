@@ -1,5 +1,5 @@
 variable "aws_region" {
-  default = "eu-west-2"
+  default = "ap-southeast-2"
 }
 
 variable "cred_path" {
@@ -7,7 +7,7 @@ variable "cred_path" {
 }
 
 variable "cred_profile" {
-  default = "sandpit"
+  default = "private"
 }
 
 
@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 
-module "website" {
+module "core_infrastructure" {
   source = "../../../terraform/"
 
   vpc_name = "PoS DEV VPC"
@@ -31,4 +31,9 @@ module "website" {
   region = var.aws_region
   loadbalancer_name_prefix = "website-lb-dev"
   bucket_logging_name = "phiro-lbdev"
+  deploy_image_website_instance_type = "t2.small"
+  number_of_instances = 3
+  maximum_number_of_instances = 6
+  minumum_number_of_instances = 3
+  deploy_image_website = "ami-0f42adcde7bd302ce"
 }

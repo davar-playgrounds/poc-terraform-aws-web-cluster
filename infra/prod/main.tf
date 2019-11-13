@@ -6,7 +6,7 @@ provider "aws" {
 }
 
 variable "aws_region" {
-  default = "us-east-1"
+  default = "ap-southeast-2"
 }
 
 variable "cred_path" {
@@ -14,9 +14,9 @@ variable "cred_path" {
 }
 
 variable "cred_profile" {
-  default = "sandpit"
+  default = "private"
 }
-module "website" {
+module "core_infrastructure" {
   source = "../../terraform/"
 
   vpc_name = "PoS PROD VPC"

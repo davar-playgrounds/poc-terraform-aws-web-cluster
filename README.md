@@ -78,3 +78,8 @@ terraform init
 terrafrorm plan -out env.plan
 terraform apply env.plan
 ``` 
+
+## Deployment 
+
+
+ 

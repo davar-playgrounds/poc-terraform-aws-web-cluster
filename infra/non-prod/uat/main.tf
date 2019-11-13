@@ -14,10 +14,10 @@ variable "cred_path" {
 }
 
 variable "cred_profile" {
-  default = "sandpit"
+  default = "private"
 }
 
-module "website" {
+module "core_infrastructure" {
   source = "../../../terraform/"
 
   vpc_name = "PoS UAT VPC"
