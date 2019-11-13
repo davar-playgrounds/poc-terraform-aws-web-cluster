@@ -22,7 +22,9 @@ variable "release_version" {
   default = "0.0.3"
 }
 
-
+variable "number_of_instances" {
+  default = 9
+}
 module "core_infrastructure" {
   source = "../../terraform-module/"
 
@@ -31,12 +33,12 @@ module "core_infrastructure" {
   private_subnets = ["10.3.0.0/24","10.3.1.0/24","10.3.2.0/24"]
   public_subnets = ["10.3.3.0/24","10.3.4.0/24","10.3.5.0/24"]
   enable_nat_gw = true
-  environment = "dev"
+  environment = "prod"
   region = var.aws_region
   loadbalancer_name_prefix = "website-lb-prod"
   bucket_logging_name = "loadbalance-access-logging-prod"
   deploy_image_website_instance_type = "t2.small"
-  number_of_instances = 9
+  number_of_instances = var.number_of_instances
   maximum_number_of_instances = 9
   minumum_number_of_instances = 3
   deploy_image_website = var.deploy_image_website

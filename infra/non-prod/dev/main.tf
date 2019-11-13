@@ -1,5 +1,6 @@
 variable "aws_region" {
   default = "ap-southeast-2"
+  description = "Region you want to deploy to"
 }
 
 variable "cred_path" {
@@ -16,6 +17,10 @@ variable "release_version" {
 
 variable "deploy_image_website" {
   default = "ami-0df9ec47d051ba2bf"
+}
+
+variable "number_of_instances" {
+  default = 3
 }
 
 provider "aws" {
@@ -44,7 +49,7 @@ module "core_infrastructure" {
   bucket_logging_name = "phiro-lbdev"
   deploy_image_website_instance_type = "t2.small"
   # Change this number to scale up the number of instances.
-  number_of_instances = 3
+  number_of_instances = var.number_of_instances
   # Number of instances should be between the next two values. (including)
   maximum_number_of_instances = 6
   minumum_number_of_instances = 3

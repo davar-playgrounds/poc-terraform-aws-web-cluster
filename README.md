@@ -17,6 +17,7 @@ Out of scope are:
 - Limited use of SCM backed terraform modules to keep all code together. 
 - Security in IAM , restrictions only as stipulated in the assignment. 
 - CI other than an bash pipeline.
+- SSL certification and HTTPS 
 
 Licence:  
 This software is licensed, before use please assess this fits your business-case. 
@@ -93,16 +94,34 @@ The readme will continue with the flow as follows:
 - Provision : Infrastructure and deployment
 - The pipeline, go with the flow
 
-## TL;DR 
+## TL;DR Quick start
 After installing and assuring the prerequisites. 
 Go to the ci folder and run
 ```bash 
-bash pipeline.sh 0.1.0 DEV
+bash pipeline.sh 0.1.0 DEV true
 ```
+Param 1 : Version to deploy, defaults to 0.0.0
+Param 2 : Environment to deploy to, one of 'DEV','UAT','PROD' defaults to 'DEV' 
+Param 3 : Build AIM iso before deploying, needs to have a pipeline.sh with true run first. One of 'true', 'false', defaults to 'true' 
+
+You can test build an AIM image and then deploy it to all environments by:
+```bash
+bash pipeline.sh 0.1.0 DEV true
+bash pipeline.sh 0.1.0 UAT false
+bash pipeline.sh 0.1.0 PROD false
+```
+
 And follow the deployment, note that you can follow the commands in the pipeline file to see how the process is working. This pipeline can easily run from Jenkins, Concourse, Circle CI or other CD/CI environment. 
 
+The process will return the endpoint in the format: 
+```text
+Outputs:
+
+loadbalancer_dns = lb-website-<$ENV>-557559432.ap-southeast-2.elb.amazonaws.com
+```
 
 
+# Details
 
 ## Skeleton project generation. 
 The start phase is the generation of the directory structure of the site. Projects should follow a standard pattern that makes automation over several projects easier.
@@ -160,8 +179,33 @@ Values: Guarantee of status of the platform. Platform as a service, Infrastructu
 Deployment and infrastructure maintenance in one provision phase. Expandable over many environments.
 On completion the terraform apply script returns the endpoint of the loadbalancer to see the application on. 
 
- 
+Parameters: 
+
+| Name | Example |  External parameter | Description |
+| --- | --- | --- | --- |
+|vpc_name | "PoS UAT VPC" | no | Name the VPC will get
+|  vpc_cidr | "10.2.0.0/21" | no | CIDR address of the VPC, needs to be private and cannot overlap other VPCs when plan to bridge to them. 
+|  private_subnets | ["10.2.0.0/24","10.2.1.0/24","10.2.2.0/24"] | no | Needs to be inside the VPC range
+|  public_subnets | ["10.2.3.0/24","10.2.4.0/24","10.2.5.0/24"] | no | Needs to be inside the VPC range 
+|  enable_nat_gw | true | no | Allow instances to connect out to the internet
+|  environment | "uat" | no | environment name the resources will be tagged with
+|  region | var.aws_region | yes | Region to deploy to.
+|  loadbalancer_name_prefix | "website-lb-uat" | no | Name of the loadbalancer
+|  bucket_logging_name | "loadbalance-access-logging-uat" | no | Name of the logging bucket
+|  deploy_image_website_instance_type | "t2.small" | no | AWS instance type
+|  number_of_instances | var.number_of_instances| | yes | Number of instances that should run. (preferred number)
+|  maximum_number_of_instances | 6 | no | Max if number of instances, needs to be greater or equal to the number of instances
+|  minumum_number_of_instances | 3 | no | Min if number of instances, needs to be smaller or equal to the number of instances
+|  deploy_image_website | var.deploy_image_website | yes  | AIM Image to deploy, needs to exist and permitted to be used
+|  release_version| var.release_version | yes | Version of the release that is passed to the AIM
+
+An external parameter is a parameter that can be passed into the terraform script by `-var`  
 
 Note: This system tears down the autoscaler on a new deploy and creates a new one, causing a few minutes outage, there is way to have no outage by doing the instance replacement by hand in the autoscaler console on AWS or use AWS commandline. 
 
 
+# Cleanup
+Delete the resources by going in the `infra/<env>` folders and run
+```bash
+terraform destroy
+```

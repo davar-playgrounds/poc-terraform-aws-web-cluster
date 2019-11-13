@@ -23,6 +23,9 @@ variable "release_version" {
   default = "0.0.3"
 }
 
+variable "number_of_instances" {
+  default = 6
+}
 
 module "core_infrastructure" {
   source = "../../../terraform-module/"
@@ -37,7 +40,7 @@ module "core_infrastructure" {
   loadbalancer_name_prefix = "website-lb-uat"
   bucket_logging_name = "loadbalance-access-logging-uat"
   deploy_image_website_instance_type = "t2.small"
-  number_of_instances = 6
+  number_of_instances = var.number_of_instances
   maximum_number_of_instances = 6
   minumum_number_of_instances = 3
   deploy_image_website = var.deploy_image_website
