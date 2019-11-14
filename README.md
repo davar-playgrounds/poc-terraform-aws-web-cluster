@@ -65,6 +65,10 @@ This project is a proof of skill for the use as terraform as a Infra as Code exa
 # Architecture 
 
 Architecural decisions are placed in the docs/doc/adr folder in the form of [Architecture Decision Records](https://github.com/joelparkerhenderson/architecture_decision_record) 
+
+![Diagram](docs/Architecture1.0.0.jpg)
+ 
+
 # Implementation 
 
 ## Technology stack
