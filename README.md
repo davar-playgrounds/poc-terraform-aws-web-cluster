@@ -105,17 +105,18 @@ The readme will continue with the flow as follows:
 After installing and assuring the prerequisites. 
 Go to the ci folder and run
 ```bash 
-bash pipeline.sh 0.1.0 DEV true
+bash pipeline.sh 0.1.0 DEV true 6
 ```
 Param 1 : Version to deploy, defaults to 0.0.0  
 Param 2 : Environment to deploy to, one of 'DEV','UAT','PROD' defaults to 'DEV'   
 Param 3 : Build AIM iso before deploying, needs to have a pipeline.sh with true run first. One of 'true', 'false', defaults to 'true'   
+Param 4: Number of instances to created in the autoscaler. Note that this number needs to be between the min and max number of instances defined in the main terraform files.
 
 You can test build an AIM image and then deploy it to all environments by:
 ```bash
-bash pipeline.sh 0.1.0 DEV true
-bash pipeline.sh 0.1.0 UAT false
-bash pipeline.sh 0.1.0 PROD false
+bash pipeline.sh 0.1.0 DEV true 3
+bash pipeline.sh 0.1.0 UAT false 6
+bash pipeline.sh 0.1.0 PROD false 9
 ```
 
 And follow the deployment, note that you can follow the commands in the pipeline file to see how the process is working. This pipeline can easily run from Jenkins, Concourse, Circle CI or other CD/CI environment. 
