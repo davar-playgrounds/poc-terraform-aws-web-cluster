@@ -2,6 +2,7 @@
 
 
 This is on request from Ask Nicely as a skills test.  
+
 Though the assignment is simple terraform script, this script is not really of value without being part of a deployment pipeline. On a senior level this pipeline needs to be placed in context to show the value of the script. 
 So it has been decided to place the terraform script in a pipeline.  
 Goals are:  
