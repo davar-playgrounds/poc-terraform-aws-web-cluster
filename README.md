@@ -102,6 +102,48 @@ The readme will continue with the flow as follows:
 - The pipeline, go with the flow
 
 ## TL;DR Quick start
+
+There is an easy and and a little more involved quick way to run the stack.
+One is to encapsulate most of the requirements by docker so you do not need to set up much, the other is having aws-vault, packer and terraform installed on your system and run that. 
+
+
+
+### By docker 
+
+#### Build image
+For this you only need (linux) docker and aws key and secret. 
+
+from `ci/packer-builder`
+set the env values for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY with your aws key and secret
+```bash 
+export AWS_ACCESS_KEY_ID=<yourkeyhere>
+export AWS_SECRET_ACCESS_KEY=<yoursecrethere>
+```
+Then run 
+```bash
+bash build-packer-builder.sh <version> > output.txt
+#for instance 
+bash build-packer-builder.sh 0.2.2 > output.txt
+```
+You need the output.txt for the next phase, the next docker build will pick that file up.
+
+#### Deploy image 
+From the `ci/terraform-builder` folder run 
+
+```bash 
+bash build-terraform-builder.sh <Version> <number_of_instances> <Environment> > result.txt
+#For instance
+bash build-terraform-builder.sh 0.2.4 3 DEV
+```
+Param 1: Version to deploy, defaults to 0.0.0 
+Param 2: Number of instances to deploy, defaults to 3
+Param 3: Environment to deploy to, one of DEV|UAT|PROD, defaults to DEV
+
+This will create a terraform.tfstate file you can use for altering or destroying the stack later. 
+
+
+### By aws-vault 
+
 After installing and assuring the prerequisites. 
 Go to the ci folder and run
 ```bash 

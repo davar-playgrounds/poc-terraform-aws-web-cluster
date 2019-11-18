@@ -8,7 +8,7 @@ NUMBER_OF_INSTANCES=${4:-3}
 cd image-builder
 if [[ "${BUILD_NEW}" ==  "true" ]]; then
   bash build-release.sh ${VERSION} 2>&1 | tee output.txt
-  tail -3 output.txt | head -3 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }' >  ami.txt
+  tail -8 output.txt | head -8 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }' >  ami.txt
 else
   if [ ! -f ./ami.txt ];then
     echo "You need to build first to get an ami target"
@@ -37,5 +37,9 @@ elif [[ "PROD" == "${ENV_TARGET}" ]]; then
   terraform apply env.plan
 else
   echo "${ENV_TARGET} is not known, will do nothing. Valid envs are DEV|UAT|PROD"
+  touch terraform.tfstate
 fi
+echo "## START ##"
+cat terraform.tfstate
+echo "## END ##"
 cd -

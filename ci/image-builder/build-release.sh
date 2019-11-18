@@ -6,4 +6,3 @@ aws-vault exec home -- packer build \
   -var version=${VERSION} \
   website-builder.json
 
-
