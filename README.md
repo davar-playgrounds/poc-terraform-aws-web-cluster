@@ -109,17 +109,26 @@ The readme will continue with the flow as follows:
 - Provision : Infrastructure and deployment
 - The pipeline, go with the flow
 
+---
+
 ## TL;DR Quick start
 
 There is an easy and and a little more involved quick way to run the stack.
 One is to encapsulate most of the requirements by docker so you do not need to set up much, the other is having aws-vault, packer and terraform installed on your system and run that. 
 
+By Docker is the easy way to do as you only need docker, the aws-vault needs the rest of the prereqs.  
 
+---
 
 ### By docker 
 
 #### Build image
 For this you only need (linux) docker and aws key and secret. 
+You want to register the base image we use: 
+This is a image with php and fastcgi installed. Get a subscription at aws-marketplace/CentOS 8 LEMP Stack - Linux Nginx MySQL/MariaDB PHP 7.2-4c9ced57-677c-4dff-b708-e91c27f3fd7b-ami-042144ca63e136136.4 (no costs except usage)  
+Region is `ap-southeast-2`  
+Now for the docker commands, we have two builders, `packer-builder` that creates the image and `terraform-builder` that deploys the infrastructure.   
+
 
 from `ci/packer-builder`
 set the env values for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY with your aws key and secret
@@ -135,26 +144,29 @@ bash build-packer-builder.sh 0.2.2 > output.txt
 ```
 You need the output.txt for the next phase, the next docker build will pick that file up.
 
-#### Deploy image 
+#### Deploy image and infrastructure
 From the `ci/terraform-builder` folder run 
 
 ```bash 
-bash build-terraform-builder.sh <Version> <number_of_instances> <Environment> > result.txt
+bash build-terraform-builder.sh <Version> <number_of_instances> <Environment> 
 #For instance
 bash build-terraform-builder.sh 0.2.4 3 DEV
 ```
-Param 1: Version to deploy, defaults to 0.0.0 
-Param 2: Number of instances to deploy, defaults to 3
-Param 3: Environment to deploy to, one of DEV|UAT|PROD, defaults to DEV
+Param 1: Version to deploy, defaults to 0.0.0  
+Param 2: Number of instances to deploy, defaults to 3  
+Param 3: Environment to deploy to, one of DEV|UAT|PROD, defaults to DEV  
 
-This will create a terraform.tfstate file you can use for altering or destroying the stack later. 
-For this PoC  you need to copy the terraform.tfstate file to the infra folder of the env you were running from (for instance for DEV that would be infra/non-prod/dev) after that you can use it for 
+This will create a `terraform.tfstate` file you can use for altering or destroying the stack later. 
+For this PoC  you need to copy the `terraform.tfstate` file to the infra folder of the env you were running from  
+(for instance for DEV that would be infra/non-prod/dev) after that you can use it for 
 altering and deleting the terraform stack. 
 
+----
 
 ### By aws-vault 
 
-After installing and assuring the prerequisites. 
+You need to install the prequisites first to do the deployment this way.  
+After installing and assuring the prerequisites.   
 Go to the ci folder and run
 ```bash 
 bash pipeline.sh 0.1.0 DEV true 6
@@ -182,6 +194,9 @@ loadbalancer_dns = lb-website-<$ENV>-557559432.ap-southeast-2.elb.amazonaws.com
 
 
 # Details
+
+This will explain the details of the solution and is only of interest for those who need changes made in how the PoC works or wants to know how the PoC is working.  
+
 
 ## Skeleton project generation. 
 The start phase is the generation of the directory structure of the site. Projects should follow a standard pattern that makes automation over several projects easier.
