@@ -123,7 +123,7 @@ By Docker is the easy way to do as you only need docker, the aws-vault needs the
 ### By docker 
 
 #### Build image
-For this you only need (linux) docker and aws key and secret. 
+For this you only need (linux) docker and aws key and secret as well as an aws console account.   
 You want to register the base image we use: 
 This is a image with php and fastcgi installed. Get a subscription at aws-marketplace/CentOS 8 LEMP Stack - Linux Nginx MySQL/MariaDB PHP 7.2-4c9ced57-677c-4dff-b708-e91c27f3fd7b-ami-042144ca63e136136.4 (no costs except usage)  
 Region is `ap-southeast-2`  
