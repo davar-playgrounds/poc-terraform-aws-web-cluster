@@ -85,8 +85,9 @@ A diagram of the envisioned architecture:
 - Terraform 0.12.13  
 
 **Ancillary technology**
-- Linux Gnome 3.34
+- Linux - Gnome 3.34
 - Bash 5.0 
+- Docker 19.03 (For the easy-quickstart, you would not need the other requirements anymore below this one)
 - IntelliJ 2019.2.4  
 - Ansible 2.9.0 
 - [ADR-tools](https://github.com/npryce/adr-tools/releases/tag/3.0.0)  
@@ -94,6 +95,8 @@ A diagram of the envisioned architecture:
 - [AWS-Vault](https://github.com/99designs/aws-vault)
 
 ## Prerequisites
+- Docker installed   
+-- OR --
 - AWS account with admin rights 
 - AWS key and secret to the admin account
 - Configure the .aws/credentials file as we use this in the terraform script, create the `private` profile 
