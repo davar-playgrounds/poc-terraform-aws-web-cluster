@@ -10,9 +10,8 @@ Though the assignment is simple terraform script, this script is not really of v
 So it has been decided to place the terraform script in a pipeline.  
 Goals are:  
 - Show the added value of a pipeline. 
-- Create a PoC that can be used outside training exercises. 
+- Showcase what can be build in about 8 hours of work. 
 - Trigger a discussion of value and business processes as a result of this PoS 
-- Showcase ask nicely what modern technologies can deliver in a short time. 
 
 Out of scope are:  
 - Any type of normal corroboration with the team or customer to establish this adds value to them and / or the team. 
@@ -33,7 +32,7 @@ Licence:
 This software is licensed, before use please assess this fits your business-case. 
 
 
-Requirements of the core project; 
+Requirements of the core project (this was based on a test requirement for a job-interview); 
 
 ```
 Write a Terraform resource that launches:
@@ -76,6 +75,8 @@ Architecural decisions are placed in the docs/doc/adr folder in the form of [Arc
 
 A diagram of the envisioned architecture:  
 ![Diagram](docs/Architecture1.0.0.jpg)
+ 
+There is the core requirment list above and the pipeline it is placed in to place it in the context of application lifecycle coupled to the infrastructure that follows the same cycle. 
  
 
 # Implementation 
@@ -141,9 +142,11 @@ export AWS_SECRET_ACCESS_KEY=<yoursecrethere>
 ```
 Then run 
 ```bash
+cd ci/packer-builder
 bash build-packer-builder.sh <version> > output.txt
 #for instance 
 bash build-packer-builder.sh 0.2.2 > output.txt
+cd -
 ```
 You need the output.txt for the next phase, the next docker build will pick that file up.
 
@@ -151,9 +154,11 @@ You need the output.txt for the next phase, the next docker build will pick that
 From the `ci/terraform-builder` folder run 
 
 ```bash 
+cd ci/terraform-builder
 bash build-terraform-builder.sh <Version> <number_of_instances> <Environment> 
 #For instance
 bash build-terraform-builder.sh 0.2.4 3 DEV
+cd -
 ```
 Param 1: Version to deploy, defaults to 0.0.0  
 Param 2: Number of instances to deploy, defaults to 3  
@@ -163,6 +168,11 @@ This will create a `terraform.tfstate` file you can use for altering or destroyi
 For this PoC  you need to copy the `terraform.tfstate` file to the infra folder of the env you were running from  
 (for instance for DEV that would be infra/non-prod/dev) after that you can use it for 
 altering and deleting the terraform stack. 
+
+
+Now, note that the docker phase only does a build, not a run. We are not using docker in the classical sense. We use it as an encapsulated artefact builder. This is closer of how [Concourse CI](https://concourse-ci.org/) is working. 
+Since the real artefacts are created on AWS there is no need to have any 
+artefact in the docker repo to run. So the image creation and deployment is triggered in the `docker build`. There is no `docker run`. The docker-images are not reusable and can be deleted 
 
 ----
 
@@ -195,7 +205,7 @@ Outputs:
 loadbalancer_dns = lb-website-<$ENV>-557559432.ap-southeast-2.elb.amazonaws.com
 ```
 
-
+Note that this pipeline.sh is also used by the docker section, but it is encapsulated there. 
 # Details
 
 This will explain the details of the solution and is only of interest for those who need changes made in how the PoC works or wants to know how the PoC is working.  
